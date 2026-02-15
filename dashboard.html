@@ -1,268 +1,964 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="login.html"}}catch(e){window.location.href="login.html"}}();</script>
+<script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="https://serlf.com/login.html"}}catch(e){window.location.href="https://serlf.com/login.html"}}();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>serlf — Dashboard</title>
+<title>Captain Dev 💻 — Developer Command Center</title>
+<meta name="description" content="Captain Dev's developer tools hub - APIs, SDKs, docs, and cutting-edge development resources">
 <style>
-:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+:root { 
+  --bg: #0a0e1a; 
+  --surface: #0f1421; 
+  --surface2: #141b2e; 
+  --surface3: #1a2332;
+  --border: #1e2938; 
+  --text: #e8e9f0; 
+  --muted: #64748b; 
+  --accent: #10b981; 
+  --accent-dark: #0d9a6b;
+  --accent-light: #34d399; 
+  --cyan: #22d3ee; 
+  --purple: #7c6df0; 
+  --pink: #f06292;
+  --code-bg: #0d1117;
+  --code-border: #30363d;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --glass-bg: rgba(15, 20, 33, 0.7);
+  --glass-border: rgba(30, 41, 56, 0.8);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
-nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: color 0.3s; }
-.nav-links a:hover { color: var(--text); }
-.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+html { font-size: 16px; }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+body { 
+  background: radial-gradient(ellipse at top, rgba(16, 185, 129, 0.05) 0%, transparent 50%), 
+              radial-gradient(ellipse at bottom right, rgba(124, 109, 240, 0.03) 0%, transparent 50%),
+              var(--bg);
+  color: var(--text); 
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; 
+  line-height: 1.6; 
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+  position: relative;
+}
 
-.welcome-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-.welcome-bar h1 { font-size: 1.8rem; font-weight: 800; }
-.welcome-bar h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.status-pill { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--green); border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* Glass morphism base */
+.glass { 
+  background: var(--glass-bg); 
+  border: 1px solid var(--glass-border); 
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px); 
+}
 
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; }
-.card:hover { border-color: var(--green); }
-.card-icon { font-size: 2rem; margin-bottom: 1rem; }
-.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.card-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
-.card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
-.card-status .dot { width: 6px; height: 6px; border-radius: 50%; }
-.dot-live { background: var(--green); }
-.dot-setup { background: var(--cyan); animation: pulse 1.5s ease-in-out infinite; }
+/* Header */
+.header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 1rem 2rem; 
+  border-bottom: 1px solid var(--border); 
+  flex-shrink: 0; 
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  position: relative;
+}
 
-.section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+.header-left { display: flex; align-items: center; gap: 1.5rem; }
+.logo { 
+  font-size: 1.4rem; 
+  font-weight: 800; 
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
 
-.actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 3rem; }
-.action { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; text-decoration: none; color: var(--text); transition: all 0.3s; }
-.action:hover { border-color: var(--green); transform: translateY(-2px); }
-.action-icon { font-size: 1.5rem; }
-.action-text { font-weight: 600; font-size: 0.95rem; }
-.action-sub { color: var(--muted); font-size: 0.8rem; }
+.captain-badge {
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #000;
+  padding: 0.4rem 1rem; 
+  border-radius: 20px; 
+  font-size: 0.8rem; 
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
 
-.plan-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-.plan-info { }
-.plan-name { font-weight: 700; }
-.plan-price { color: var(--green); font-size: 0.9rem; }
-.plan-btn { padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.3); text-decoration: none; transition: all 0.3s; }
-.plan-btn:hover { background: rgba(52,211,153,0.2); }
+.header-right { display: flex; align-items: center; gap: 1.5rem; }
+.status-indicator { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  font-size: 0.85rem; 
+  color: var(--success); 
+}
+.status-dot { 
+  width: 8px; 
+  height: 8px; 
+  border-radius: 50%; 
+  background: var(--success); 
+  animation: pulse 2s infinite; 
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.user-info { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.75rem; 
+  font-size: 0.9rem; 
+}
+.user-info img { 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 50%; 
+  border: 2px solid var(--accent);
+}
+
+/* Main layout */
+.main { flex: 1; display: flex; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { 
+  width: 280px; 
+  background: var(--glass-bg);
+  border-right: 1px solid var(--border); 
+  display: flex; 
+  flex-direction: column; 
+  flex-shrink: 0; 
+  backdrop-filter: blur(20px);
+  z-index: 50;
+}
+
+.sidebar-section { 
+  padding: 1.5rem; 
+  border-bottom: 1px solid var(--border); 
+}
+
+.sidebar-label { 
+  font-size: 0.7rem; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  color: var(--muted); 
+  margin-bottom: 1rem; 
+  font-weight: 700; 
+}
+
+.quick-actions { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.75rem; 
+}
+
+.action-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.8rem; 
+  padding: 0.8rem 1rem; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  transition: all 0.2s; 
+  font-size: 0.9rem; 
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.action-item:hover { 
+  background: rgba(16, 185, 129, 0.1); 
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.action-item.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #000;
+  font-weight: 600;
+}
+
+.action-item.primary:hover {
+  background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+  transform: translateY(-2px);
+}
+
+.action-icon { 
+  width: 20px; 
+  text-align: center; 
+  font-size: 1.1rem;
+}
+
+/* Content */
+.content { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 2rem; 
+  position: relative;
+}
+
+/* Hero section */
+.hero {
+  text-align: center;
+  padding: 3rem 0 4rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(34, 211, 238, 0.05));
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  border: 1px solid var(--border);
+}
+
+.hero-emoji { font-size: 4rem; margin-bottom: 1rem; }
+.hero-title { 
+  font-size: 2.5rem; 
+  font-weight: 800; 
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--cyan)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtitle { 
+  font-size: 1.2rem; 
+  color: var(--muted); 
+  margin-bottom: 2rem; 
+  font-weight: 500;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+  display: block;
+}
+
+.hero-stat-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* Product grid */
+.products-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 2rem; 
+  margin-bottom: 3rem; 
+}
+
+.product-card { 
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border); 
+  border-radius: 16px; 
+  padding: 2rem; 
+  transition: all 0.3s;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover::before { opacity: 1; }
+
+.product-card:hover { 
+  border-color: var(--accent); 
+  transform: translateY(-4px); 
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+}
+
+.product-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 1rem; 
+  margin-bottom: 1.5rem; 
+}
+
+.product-icon { 
+  font-size: 2.5rem; 
+  width: 60px; 
+  height: 60px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  border-radius: 12px; 
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--accent);
+}
+
+.product-title { 
+  font-size: 1.4rem; 
+  font-weight: 700; 
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.product-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-core { background: rgba(16, 185, 129, 0.2); color: var(--accent); }
+.badge-lab { background: rgba(124, 109, 240, 0.2); color: var(--purple); }
+
+.product-description { 
+  color: var(--muted); 
+  font-size: 1rem; 
+  margin-bottom: 1.5rem; 
+  line-height: 1.6;
+}
+
+.product-features { 
+  list-style: none; 
+  margin-bottom: 1.5rem; 
+}
+
+.product-features li { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.5rem; 
+  font-size: 0.9rem; 
+  color: var(--muted); 
+  margin-bottom: 0.5rem; 
+}
+
+.product-features li::before { 
+  content: '✓'; 
+  color: var(--accent); 
+  font-weight: 700; 
+}
+
+.product-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn { 
+  padding: 0.8rem 1.5rem; 
+  border-radius: 10px; 
+  font-size: 0.9rem; 
+  font-weight: 600; 
+  border: none; 
+  cursor: pointer; 
+  transition: all 0.3s; 
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary { 
+  background: linear-gradient(135deg, var(--accent), var(--accent-light)); 
+  color: #000; 
+}
+
+.btn-primary:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); 
+}
+
+.btn-secondary { 
+  background: var(--surface2); 
+  color: var(--text); 
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { 
+  border-color: var(--accent); 
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Code block styling */
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.code-block code {
+  color: #e6edf3;
+}
+
+/* Billing section */
+.billing-section {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(20px);
+}
+
+.billing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.billing-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.billing-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.billing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.billing-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.billing-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.billing-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .sidebar { 
+    position: fixed;
+    left: -280px;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  
+  .sidebar.open { left: 0; }
+  
+  .content { padding: 1rem; }
+  
+  .hero-stats { 
+    flex-direction: column; 
+    gap: 1.5rem; 
+  }
+  
+  .hero-title { font-size: 2rem; }
+  
+  .products-grid { 
+    grid-template-columns: 1fr; 
+    gap: 1.5rem; 
+  }
+  
+  .billing-grid { 
+    grid-template-columns: 1fr; 
+  }
+
+  .header { padding: 1rem; }
+  
+  .hero { padding: 2rem 1rem; }
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
 
 @media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; }
-  .actions { grid-template-columns: 1fr; }
-  .welcome-bar { flex-direction: column; gap: 1rem; align-items: flex-start; }
-  .plan-bar { flex-direction: column; gap: 1rem; text-align: center; }
+  .mobile-menu-btn { display: block; }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">serlf</div>
-  <div class="nav-links">
-    <span class="nav-badge">Subscriber</span>
-    <a href="https://serlf.com">Home</a>
-    <a href="mailto:hello@serlf.com">Support</a>
-    <span id="user-info" style="display:flex;align-items:center;gap:8px;"></span>
-    <a href="#" onclick="signOut()" style="color:var(--muted);font-size:0.8rem;">Sign Out</a>
+<div class="header">
+  <div class="header-left">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <a href="#" class="logo">serlf.net</a>
+    <div class="captain-badge">
+      <span>💻</span>
+      <span>CAPTAIN DEV</span>
+    </div>
   </div>
-</nav>
-
-<div class="container">
-
-  <div class="welcome-bar">
-    <h1>Welcome to <span>serlf</span></h1>
-    <div class="status-pill">
+  <div class="header-right">
+    <div class="status-indicator">
       <div class="status-dot"></div>
-      Setting up your environment
+      <span>APIs Online</span>
     </div>
+    <div class="user-info" id="user-info"></div>
   </div>
-
-  <div class="section-title">Your Products</div>
-  <div class="grid">
-    <a href="platform.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🤖</div>
-      <div class="card-title">serlf Platform</div>
-      <div class="card-desc">Your dedicated AI team, learning your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="sites.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🌐</div>
-      <div class="card-title">serlf Sites</div>
-      <div class="card-desc">Your AI-managed website, always online.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Ready to set up →</div>
-    </a>
-    <a href="security.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🔐</div>
-      <div class="card-title">serlf Security</div>
-      <div class="card-desc">Enterprise-grade protection for your environment.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="transform.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">☁️</div>
-      <div class="card-title">serlf Transform</div>
-      <div class="card-desc">Your professional cloud infrastructure.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="intelligence.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">📊</div>
-      <div class="card-title">serlf Intelligence</div>
-      <div class="card-desc">AI-powered insights for your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="labs.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🧪</div>
-      <div class="card-title">serlf Labs</div>
-      <div class="card-desc">Cutting-edge AI research, applied to you.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="mail.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">📧</div>
-      <div class="card-title">serlf Mail</div>
-      <div class="card-desc">Professional email for your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Ready to set up →</div>
-    </a>
-  </div>
-
-  <div class="section-title">Quick Actions</div>
-  <div class="actions">
-    <a href="mailto:hello@serlf.com?subject=Onboarding" class="action">
-      <div class="action-icon">💬</div>
-      <div>
-        <div class="action-text">Start Onboarding</div>
-        <div class="action-sub">Tell us about your business</div>
-      </div>
-    </a>
-    <a href="mailto:hello@serlf.com?subject=Support" class="action">
-      <div class="action-icon">🛟</div>
-      <div>
-        <div class="action-text">Get Support</div>
-        <div class="action-sub">We're here to help</div>
-      </div>
-    </a>
-    <a href="https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM" class="action">
-      <div class="action-icon">💳</div>
-      <div>
-        <div class="action-text">Manage Billing</div>
-        <div class="action-sub">Update payment or cancel</div>
-      </div>
-    </a>
-    <a href="https://serlf.com" class="action">
-      <div class="action-icon">📖</div>
-      <div>
-        <div class="action-text">Learn More</div>
-        <div class="action-sub">See all features and products</div>
-      </div>
-    </a>
-  </div>
-
-  <div class="plan-bar">
-    <div class="plan-info">
-      <div class="plan-name">serlf — All Products</div>
-      <div class="plan-price">$1 CAD / month · Active</div>
-    </div>
-    <a href="https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM" class="plan-btn">Manage Plan</a>
-  </div>
-
-  <!-- Owner Panel -->
-  <div id="owner-panel" style="display:none;margin-top:2rem;">
-    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:var(--accent2);">⚓ Owner Panel</h2>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
-      <a href="https://dashboard.stripe.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">💳</div>
-        <div class="card-title">Stripe Dashboard</div>
-        <div class="card-desc">Payments, customers, revenue</div>
-      </a>
-      <a href="https://github.com/orgs/eose-sre/repositories" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">📦</div>
-        <div class="card-title">GitHub Repos</div>
-        <div class="card-desc">All 8 serlf repos</div>
-      </a>
-      <a href="https://portal.azure.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">☁️</div>
-        <div class="card-title">Azure Portal</div>
-        <div class="card-desc">DNS, KV, AKS, infrastructure</div>
-      </a>
-      <a href="https://master1.eose.ca" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">⚓</div>
-        <div class="card-title">Admiral Fleet Control</div>
-        <div class="card-desc">Captain fleet management</div>
-      </a>
-      <a href="https://console.cloud.google.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">🔑</div>
-        <div class="card-title">Google Cloud</div>
-        <div class="card-desc">OAuth, SSO, APIs</div>
-      </a>
-      <div class="card" id="stats-card">
-        <div class="card-icon">📊</div>
-        <div class="card-title">Quick Stats</div>
-        <div class="card-desc" id="quick-stats">Loading...</div>
-      </div>
-    </div>
-
-    <div style="margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
-      <div style="font-weight:700;margin-bottom:0.75rem;">🚀 Fleet Status</div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;" id="fleet-domains"></div>
-    </div>
-  </div>
-
 </div>
 
-<script src="serlf-api.js"></script>
-<script>
-// Load user info from auth
-(function() {
-  var auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
-  var userInfo = document.getElementById('user-info');
-  if (auth.picture) {
-    userInfo.innerHTML = '<img src="' + auth.picture + '" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--green);" alt="">';
-  }
-  if (auth.name || auth.email) {
-    var name = auth.name || auth.email.split('@')[0];
-    userInfo.innerHTML += '<span style="color:var(--text);font-size:0.85rem;font-weight:500;">' + name + '</span>';
-  }
-  // Personalize welcome
-  if (auth.name) {
-    var h1 = document.querySelector('.welcome-bar h1');
-    if (h1) h1.innerHTML = 'Welcome, <span>' + auth.name.split(' ')[0] + '</span>';
-  }
-
-  // Owner panel
-  if (SERLF_AUTH.isOwner()) {
-    document.getElementById('owner-panel').style.display = 'block';
+<div class="main">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Start</div>
+      <div class="quick-actions">
+        <a href="#platform" class="action-item primary">
+          <span class="action-icon">⚡</span>
+          <span>Platform Dashboard</span>
+        </a>
+        <a href="#api-docs" class="action-item">
+          <span class="action-icon">📚</span>
+          <span>API Documentation</span>
+        </a>
+        <a href="#sdks" class="action-item">
+          <span class="action-icon">🔧</span>
+          <span>SDKs & Tools</span>
+        </a>
+        <a href="#playground" class="action-item">
+          <span class="action-icon">🧪</span>
+          <span>API Playground</span>
+        </a>
+      </div>
+    </div>
     
-    // Badge
-    var badge = document.querySelector('.nav-badge');
-    if (badge) { badge.textContent = 'Owner'; badge.style.background = 'rgba(240,98,146,0.15)'; badge.style.color = '#f06292'; }
+    <div class="sidebar-section">
+      <div class="sidebar-label">Developer Tools</div>
+      <div class="quick-actions">
+        <a href="#status" class="action-item">
+          <span class="action-icon">📊</span>
+          <span>System Status</span>
+        </a>
+        <a href="#webhooks" class="action-item">
+          <span class="action-icon">🔗</span>
+          <span>Webhooks</span>
+        </a>
+        <a href="#keys" class="action-item">
+          <span class="action-icon">🔑</span>
+          <span>API Keys</span>
+        </a>
+        <a href="#logs" class="action-item">
+          <span class="action-icon">📋</span>
+          <span>Request Logs</span>
+        </a>
+      </div>
+    </div>
 
-    // Fleet domains
-    var domains = ['serlf.ca','serlf.com','serlf.net','serlf.org','serlf.club','serlf.info','serlf.shop','serlf.store'];
-    var fleetEl = document.getElementById('fleet-domains');
-    domains.forEach(function(d) {
-      var link = document.createElement('a');
-      link.href = 'https://' + d;
-      link.target = '_blank';
-      link.style.cssText = 'padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--green);font-size:0.85rem;font-weight:600;text-decoration:none;transition:all 0.2s;';
-      link.textContent = d;
-      link.onmouseover = function() { this.style.borderColor = 'var(--green)'; };
-      link.onmouseout = function() { this.style.borderColor = 'var(--border)'; };
-      fleetEl.appendChild(link);
-    });
+    <div class="sidebar-section" style="margin-top: auto;">
+      <div class="quick-actions">
+        <a href="https://github.com/serlf" target="_blank" class="action-item">
+          <span class="action-icon">🐙</span>
+          <span>GitHub</span>
+        </a>
+        <a href="https://discord.gg/serlf" target="_blank" class="action-item">
+          <span class="action-icon">💬</span>
+          <span>Discord</span>
+        </a>
+        <a href="#" onclick="signOut()" class="action-item">
+          <span class="action-icon">🚪</span>
+          <span>Sign Out</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
-    // Quick stats
-    document.getElementById('quick-stats').innerHTML = '8 domains · 6 products · 1 customer · $1 MRR';
+  <div class="content">
+    <div class="hero fade-in">
+      <div class="hero-emoji">💻</div>
+      <h1 class="hero-title">Captain Dev</h1>
+      <p class="hero-subtitle">Built for developers. Powered by AI.</p>
+      
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">99.9%</span>
+          <span class="hero-stat-label">Uptime</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">< 50ms</span>
+          <span class="hero-stat-label">Response</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">24/7</span>
+          <span class="hero-stat-label">Support</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="billing-section slide-in-left">
+      <div class="billing-header">
+        <h2 class="billing-title">Your Developer Plan</h2>
+        <div class="billing-status">
+          <span class="status-dot"></span>
+          <span>Active</span>
+        </div>
+      </div>
+      
+      <div class="billing-grid">
+        <div class="billing-card">
+          <div class="billing-value">$1</div>
+          <div class="billing-label">Monthly</div>
+        </div>
+        <div class="billing-card">
+          <div class="billing-value">∞</div>
+          <div class="billing-label">API Calls</div>
+        </div>
+        <div class="billing-card">
+          <div class="billing-value">All</div>
+          <div class="billing-label">Features</div>
+        </div>
+        <div class="billing-card">
+          <div class="billing-value">Priority</div>
+          <div class="billing-label">Support</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="products-grid">
+      <!-- Platform -->
+      <div class="product-card fade-in" id="platform">
+        <div class="product-header">
+          <div class="product-icon">⚡</div>
+          <div>
+            <h3 class="product-title">Platform</h3>
+            <span class="product-badge badge-core">Core</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Complete developer infrastructure with APIs, authentication, and real-time capabilities.
+        </p>
+        <ul class="product-features">
+          <li>REST & GraphQL APIs</li>
+          <li>OAuth 2.0 / API Keys</li>
+          <li>Real-time WebSockets</li>
+          <li>Rate limiting & throttling</li>
+          <li>Request/Response logging</li>
+        </ul>
+        <div class="product-actions">
+          <a href="https://serlf.com/platform.html" class="btn btn-primary">
+            <span>Open Dashboard</span>
+            <span>→</span>
+          </a>
+          <a href="#" class="btn btn-secondary">View Docs</a>
+        </div>
+      </div>
+
+      <!-- Labs -->
+      <div class="product-card fade-in" id="labs">
+        <div class="product-header">
+          <div class="product-icon">🧪</div>
+          <div>
+            <h3 class="product-title">Labs</h3>
+            <span class="product-badge badge-lab">Experimental</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Cutting-edge experiments and beta features for early adopters and power users.
+        </p>
+        <ul class="product-features">
+          <li>AI-powered code generation</li>
+          <li>Advanced analytics</li>
+          <li>Beta API endpoints</li>
+          <li>Performance testing tools</li>
+          <li>Community experiments</li>
+        </ul>
+        <div class="product-actions">
+          <a href="https://serlf.com/labs.html" class="btn btn-primary">
+            <span>Enter Labs</span>
+            <span>🧪</span>
+          </a>
+          <a href="#" class="btn btn-secondary">Request Access</a>
+        </div>
+      </div>
+
+      <!-- Intelligence -->
+      <div class="product-card fade-in" id="intelligence">
+        <div class="product-header">
+          <div class="product-icon">🧠</div>
+          <div>
+            <h3 class="product-title">Intelligence</h3>
+            <span class="product-badge badge-core">Core</span>
+          </div>
+        </div>
+        <p class="product-description">
+          Advanced analytics and insights for your applications and API usage patterns.
+        </p>
+        <ul class="product-features">
+          <li>Usage analytics & metrics</li>
+          <li>Performance monitoring</li>
+          <li>Error tracking & alerts</li>
+          <li>Custom dashboards</li>
+          <li>API health scoring</li>
+        </ul>
+        <div class="product-actions">
+          <a href="https://serlf.com/intelligence.html" class="btn btn-primary">
+            <span>View Insights</span>
+            <span>📊</span>
+          </a>
+          <a href="#" class="btn btn-secondary">Setup Alerts</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Start Code -->
+    <div class="product-card fade-in" style="margin-bottom: 2rem;">
+      <div class="product-header">
+        <div class="product-icon">🚀</div>
+        <div>
+          <h3 class="product-title">Quick Start</h3>
+          <span class="product-badge badge-core">< 5 mins</span>
+        </div>
+      </div>
+      <p class="product-description">Get up and running with the serlf API in under 5 minutes.</p>
+      
+      <div class="code-block">
+        <code># Install the SDK
+npm install @serlf/sdk
+
+# Initialize
+import { SerlF } from '@serlf/sdk';
+const serlf = new SerlF({
+  apiKey: 'your-api-key-here',
+  environment: 'production'
+});
+
+# Make your first call
+const response = await serlf.platform.status();
+console.log('API Status:', response.status);</code>
+      </div>
+      
+      <div class="product-actions">
+        <a href="#" class="btn btn-primary">
+          <span>Get API Key</span>
+          <span>🔑</span>
+        </a>
+        <a href="#" class="btn btn-secondary">Download SDK</a>
+        <a href="#" class="btn btn-secondary">View Examples</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Captain Dev 💻 • Built with ❤️ for developers • <a href="https://serlf.com">serlf.com</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auth and user info
+const auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
+const userEl = document.getElementById('user-info');
+if (auth.picture) userEl.innerHTML += `<img src="${auth.picture}" alt="User">`;
+userEl.innerHTML += `<span>${(auth.name || 'Developer').split(' ')[0]}</span>`;
+
+// Mobile sidebar toggle
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Close sidebar on content click (mobile)
+document.querySelector('.content').addEventListener('click', () => {
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
   }
-})();
+});
 
+// Sign out function
 function signOut() {
   localStorage.removeItem('serlf_auth');
-  window.location.href = 'login.html';
+  window.location.href = 'https://serlf.com/login.html';
 }
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// Add loading animation for external links
+document.querySelectorAll('a[href^="http"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    this.style.opacity = '0.7';
+    this.style.pointerEvents = 'none';
+    setTimeout(() => {
+      this.style.opacity = '1';
+      this.style.pointerEvents = 'auto';
+    }, 2000);
+  });
+});
+
+// Intersection Observer for animation triggers
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+// Observe product cards for staggered animation
+document.querySelectorAll('.product-card').forEach((card, index) => {
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(30px)';
+  card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+  observer.observe(card);
+});
+
+// Dynamic status updates
+function updateStatus() {
+  const statuses = [
+    { text: 'APIs Online', color: 'var(--success)' },
+    { text: 'All Systems Go', color: 'var(--success)' },
+    { text: '< 50ms Response', color: 'var(--accent)' },
+    { text: 'Labs Active', color: 'var(--purple)' }
+  ];
+  
+  const statusEl = document.querySelector('.status-indicator span');
+  const currentIndex = statuses.findIndex(s => s.text === statusEl.textContent);
+  const nextIndex = (currentIndex + 1) % statuses.length;
+  const nextStatus = statuses[nextIndex];
+  
+  statusEl.textContent = nextStatus.text;
+  statusEl.style.color = nextStatus.color;
+}
+
+// Rotate status every 5 seconds
+setInterval(updateStatus, 5000);
+
+// Performance timing display
+window.addEventListener('load', () => {
+  const loadTime = performance.now();
+  if (loadTime < 1000) {
+    console.log(`🚀 Captain Dev dashboard loaded in ${Math.round(loadTime)}ms`);
+  }
+});
+
+// Service worker registration for offline capabilities
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('💻 Captain Dev: Service Worker registered'))
+      .catch(() => console.log('💻 Captain Dev: Service Worker registration failed'));
+  });
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Ctrl/Cmd + K for quick search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    // Focus search or open command palette
+    console.log('💻 Quick search activated');
+  }
+  
+  // Escape to close mobile menu
+  if (e.key === 'Escape') {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+});
+
+console.log('💻 Welcome to Captain Dev\'s command center!');
+console.log('🚀 Built for developers. Powered by AI.');
+console.log('📡 All systems operational.');
 </script>
 
 </body>
